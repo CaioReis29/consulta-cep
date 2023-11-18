@@ -22,59 +22,102 @@ class _ConsultaCepState extends State<ConsultaCep> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              "Consulta de CEP",
-              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(colors: [
+            Color.fromARGB(255, 238, 161, 187),
+            Colors.white,
+          ]),
+        ),
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const Text(
+                  "Consulta de CEP",
+                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(
+                  height: 60,
+                ),
+                SizedBox(
+                  height: 30,
+                  width: 200,
+                  child: TextFormField(
+                    controller: cepController,
+                    maxLength: 8,
+                    keyboardType: TextInputType.number,
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    elevation: 6,
+                    backgroundColor: Colors.black,
+                  ),
+                  onPressed: () async {
+                    final infos = await service.getCep(
+                      cepController.text,
+                    );
+                    setState(() {
+                      cep = infos.cep!;
+                      estado = infos.state!;
+                      cidade = infos.city!;
+                      bairro = infos.neighborhood!;
+                      rua = infos.street!;
+                    });
+                  }, // chamando a função após clicar
+                  child: const Text(
+                    "Confirmar",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  "CEP: $cep",
+                  style: const TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  "Estado: $estado",
+                  style: const TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  "Cidade: $cidade",
+                  style: const TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  "Bairro: $bairro",
+                  style: const TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  "Rua: $rua",
+                  style: const TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(
-              height: 60,
-            ),
-            SizedBox(
-              height: 30,
-              width: 200,
-              child: TextFormField(
-                controller: cepController,
-                maxLength: 8,
-                keyboardType: TextInputType.number,
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                final infos = await service.getCep(
-                  cepController.text,
-                );
-                setState(() {
-                  cep = infos.cep!;
-                  estado = infos.state!;
-                  cidade = infos.city!;
-                  bairro = infos.neighborhood!;
-                  rua = infos.street!;
-                });
-              }, // chamando a função após clicar
-              child: const Text("consulta de cpf"),
-            ),
-            Text(
-              "CEP: $cep",
-              textAlign: TextAlign.left,
-            ),
-            Text(
-              "Estado: $estado",
-              textAlign: TextAlign.left,
-            ),
-            Text(
-              "Cidade: $cidade",
-              textAlign: TextAlign.left,
-            ),
-            Text(
-              "Bairro: $bairro",
-              textAlign: TextAlign.left,
-            ),
-            Text("Rua: $rua"),
-          ],
+          ),
         ),
       ),
     );
